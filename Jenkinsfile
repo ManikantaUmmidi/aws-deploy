@@ -25,7 +25,7 @@ pipeline {
 
             steps {
                 sh '''
-                 scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /var/lib/jenkins/my-keypair.pem target/aws-deploy.jar ubuntu@$EC2_IP:/home/ubuntu
+                 scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /var/lib/jenkins/my-keypair.pem target/aws-deploy.jar ubuntu@$EC2_IP:/var/lib/jenkins
 
                 '''
             }
@@ -36,8 +36,7 @@ pipeline {
             steps {
                 sh '''
                     ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $APP_SSH_KEY ubuntu@$EC2_IP
-                    pkill -f aws-deploy.jar || true
-                    nohup java -jar /home/ubuntu/aws-deploy.jar > app.log
+                    nohup java -jar /var/lib/jenkins/aws-deploy.jar > app.log
                 '''
             }
         }
