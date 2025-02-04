@@ -25,7 +25,8 @@ pipeline {
 
             steps {
                 sh '''
-                 scp -i $APP_SSH_KEY target/aws-deploy.jar ubuntu@$EC2_IP:/home/ubuntu
+                 scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /var/lib/jenkins/my-keypair.pem target/aws-deploy.jar ubuntu@$EC2_IP:/home/ubuntu
+
                 '''
             }
 
