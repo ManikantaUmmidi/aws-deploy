@@ -3,7 +3,7 @@ pipeline {
     environment {
         AWS_KEY = "${aws_key}"
         AWS_SECRET = "${aws_secret}"
-        EC2_IP = "54.161.139.50"
+        EC2_IP = "54.221.63.185"
         APP_SSH_KEY = "/var/lib/jenkins/my-keypair.pem"
     }
 
