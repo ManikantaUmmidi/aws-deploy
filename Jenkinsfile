@@ -35,9 +35,9 @@ pipeline {
         stage("Deploy to AWS") {
             steps {
                 sh '''
-                    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $APP_SSH_KEY ubuntu@$EC2_IP << EOF
+                    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $APP_SSH_KEY ubuntu@$EC2_IP
                     pkill -f aws-deploy.jar || true
-                    nohup java -jar /home/ubuntu/aws-deploy.jar > app.log 2>&1 & EOF
+                    nohup java -jar /home/ubuntu/aws-deploy.jar > app.log
                 '''
             }
         }
