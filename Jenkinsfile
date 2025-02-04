@@ -25,8 +25,8 @@ pipeline {
 
             steps {
                 sh '''
-                 scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /var/lib/jenkins/my-keypair.pem target/aws-deploy.jar ubuntu@$EC2_IP:/var/lib/jenkins
-
+                 scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /var/lib/jenkins/my-keypair.pem target/aws-deploy.jar ubuntu@$EC2_IP:/home/ubuntu
+                sudo mv /home/ubuntu/aws-deploy.jar /var/lib/jenkins/
                 '''
             }
 
