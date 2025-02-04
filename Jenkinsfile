@@ -36,6 +36,7 @@ pipeline {
             steps {
                 sh '''
                     ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $APP_SSH_KEY ubuntu@$EC2_IP
+                    sudo fuser -k 9090/tcp	
                     nohup java -jar /var/lib/jenkins/aws-deploy.jar > app.log
                 '''
             }
