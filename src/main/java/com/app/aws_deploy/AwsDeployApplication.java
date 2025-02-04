@@ -15,6 +15,6 @@ public class AwsDeployApplication {
 
 	@GetMapping("/hello")
 	public String hello() {
-		return "Welcome to aws deploy using ci/cd pipeline";
+		return "Welcome to aws deploy using ci/cd pipeline latest";
 	}
 }
