@@ -25,9 +25,14 @@ pipeline {
             steps {
                 script {
                     sh '''
-                         $(aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 905418443792.dkr.ecr.us-east-1.amazonaws.com)
-                         docker build -t ${AWS_DOCKER_IMAGE_URL}:latest .
-                         docker push ${AWS_DOCKER_IMAGE_URL}:latest
+
+                        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-ecs-credentials']]) {
+                            $(aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 905418443792.dkr.ecr.us-east-1.amazonaws.com)
+                            docker build -t ${AWS_DOCKER_IMAGE_URL}:latest .
+                            docker push ${AWS_DOCKER_IMAGE_URL}:latest
+                        }
+
+
                     '''
                 }
             }
