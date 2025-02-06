@@ -3,9 +3,7 @@ pipeline {
     environment {
 
         AWS_ECS_CUSTER = "sample_cluster"
-        AWS_ECS_TASK_DEF = "sample-app-service-task-def"
         AWS_ECS_SERVICE = "sample-app-service"
-
         AWS_REGISTRY_CREDENTIALS = "ecr:us-east-1:aws-ecs-credentials"
         AWS_DOCKER_IMAGE_URL = "905418443792.dkr.ecr.us-east-1.amazonaws.com/spring-sample-app"
         AWS_APP_REGISTRY = "https://905418443792.dkr.ecr.us-east-1.amazonaws.com"
@@ -44,6 +42,12 @@ pipeline {
                 }
             }
 
+            stage("Upload to registry") {
+                steps {
+                   withAWS(credentials: 'aws-ecs-credentials', region: 'us-east-1') {
+                        sh "aws ecs update-service --cluster ${AWS_ECS_CUSTER} --service ${AWS_ECS_SERVICE} --force-new-deployment"
+                   }
+                }
         }
     }
 }
