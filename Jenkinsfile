@@ -17,9 +17,9 @@ pipeline {
 
         }
         stage("Build Code") {
-
-            sh 'mvn clean install'
-
+            steps {
+                sh 'mvn clean install'
+            }
          }
         stage("Build Docker") {
             steps {
