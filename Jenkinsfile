@@ -42,7 +42,7 @@ pipeline{
                 }
             }
 
-            stage("Upload to registry") {
+            stage("Deploy to aws ECS") {
                 steps {
                    withAWS(credentials: 'aws-ecs-credentials', region: 'us-east-1') {
                         sh "aws ecs update-service --cluster ${AWS_ECS_CUSTER} --service ${AWS_ECS_SERVICE} --force-new-deployment"
