@@ -1,11 +1,15 @@
 pipeline {
     agent any
     environment {
-        AWS_ECS_CREDENTIALS = "aws-ecs-credentials"
-        AWS_DOCKER_IMAGE_URL = "905418443792.dkr.ecr.us-east-1.amazonaws.com/spring-sample-app"
+
         AWS_ECS_CUSTER = "sample_cluster"
         AWS_ECS_TASK_DEF = "sample-app-service-task-def"
         AWS_ECS_SERVICE = "sample-app-service"
+
+        AWS_REGISTRY_CREDENTIALS = "ecr:us-east-1:aws-ecs-credentials"
+        AWS_DOCKER_IMAGE_URL = "905418443792.dkr.ecr.us-east-1.amazonaws.com/spring-sample-app"
+        AWS_APP_REGISTRY = "https://905418443792.dkr.ecr.us-east-1.amazonaws.com"
+
     }
 
     stages {
@@ -24,22 +28,19 @@ pipeline {
         stage("Build Docker") {
             steps {
                 script {
-                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-ecs-credentials']]) {
-                    sh '''
-                            $(aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 905418443792.dkr.ecr.us-east-1.amazonaws.com)
-
-                    '''
-                    }
+                   dockerImage = docker.build(AWS_DOCKER_IMAGE_URL + ":$BUILD_NUMBER", "./")
                 }
             }
 
         }
-        stage("Deploy") {
+        stage("Upload to registry") {
             steps {
                 script {
-                    sh '''
-                        aws ecs update-service --cluster ${AWS_ECS_CUSTER} --service ${AWS_ECS_SERVICE} --force-new-deployment
-                    '''
+                    docker.withRegistry(AWS_APP_REGISTRY, AWS_REGISTRY_CREDENTIALS) {
+                        dockerImage.push("$BUILD_NUMBER")
+                        dockerImage.push("latest")
+
+                    }
                 }
             }
 
