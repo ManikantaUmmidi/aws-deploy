@@ -41,6 +41,7 @@ pipeline {
                     }
                 }
             }
+        }
 
             stage("Upload to registry") {
                 steps {
@@ -48,6 +49,7 @@ pipeline {
                         sh "aws ecs update-service --cluster ${AWS_ECS_CUSTER} --service ${AWS_ECS_SERVICE} --force-new-deployment"
                    }
                 }
-        }
+
+    }
     }
 }
